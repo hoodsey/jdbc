@@ -11,23 +11,23 @@ import org.testcontainers.junit.jupiter.Testcontainers;;
 @Testcontainers
 class UserTest extends BaseTest {
 
+    private Integer id;
+
     @BeforeEach
     @Override
     void setUp() {
         super.setUp();
         userService = new UserService(connectionProvider);
-    }
-
-    @Test
-    @DisplayName("Проврека соедниения с БД")
-    void shouldSuccessConnection() throws Exception {
-        assertTrue(connectionProvider.checkConnection());
+        try {
+            id = userService.createUser("John", 30);
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при создании пользователя");
+        }
     }
 
     @Test
     @DisplayName("Проврека создания пользователя")
     void shouldSuccessCreateUser() throws Exception {
-        Integer id = userService.createUser("John", 30);
         try (Connection conn = connectionProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE id = ?")) {
             pstmt.setInt(1, id);
@@ -42,7 +42,6 @@ class UserTest extends BaseTest {
     @Test
     @DisplayName("Проврека изменения возраста пользователя")
     void shouldSuccessUpdateUser() throws Exception {
-        Integer id = userService.createUser("John", 30);
         userService.updateUserAge(id, 32);
         try (Connection conn = connectionProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement("SELECT age FROM users WHERE id = ?")) {
@@ -61,7 +60,6 @@ class UserTest extends BaseTest {
     @Test
     @DisplayName("Проврека удаления пользователя")
     void shouldDeleteUser() throws Exception {
-        Integer id = userService.createUser("John", 30);
         userService.deleteUser(id);
         try (Connection conn = connectionProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE id = ?")) {

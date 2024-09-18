@@ -1,8 +1,8 @@
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
+
+import static org.junit.Assert.assertTrue;
 
 abstract public class BaseTest {
 
@@ -11,7 +11,7 @@ abstract public class BaseTest {
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
-            "postgres:latest"
+            "postgres:15.2"
     );
 
     @BeforeEach
@@ -21,5 +21,11 @@ abstract public class BaseTest {
                 postgres.getUsername(),
                 postgres.getPassword()
         );
+    }
+
+    @Test
+    @DisplayName("Проврека соедниения с БД")
+    void shouldSuccessConnection() throws Exception {
+        assertTrue(connectionProvider.checkConnection());
     }
 }
