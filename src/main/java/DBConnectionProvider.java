@@ -1,7 +1,6 @@
-package org.example;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DBConnectionProvider {
 
@@ -15,11 +14,19 @@ public class DBConnectionProvider {
         this.password = password;
     }
 
-    Connection getConnection() {
+    public Connection getConnection() {
         try {
             return DriverManager.getConnection(url, username, password);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public boolean checkConnection() {
+        try (Connection connection = getConnection()) {
+            return connection != null && !connection.isClosed();
+        } catch (SQLException e) {
+            return false;
         }
     }
 }
