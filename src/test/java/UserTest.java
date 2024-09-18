@@ -17,11 +17,13 @@ class UserTest extends BaseTest {
     }
 
     @Test
+    @DisplayName("Проврека соедниения с БД")
     void shouldSuccessConnection() throws Exception {
         assertTrue(connectionProvider.checkConnection());
     }
 
     @Test
+    @DisplayName("Проврека создания пользователя")
     void shouldSuccessCreateUser() throws Exception {
         Integer id = userService.createUser("John", 30);
         try (Connection conn = connectionProvider.getConnection();
@@ -36,6 +38,7 @@ class UserTest extends BaseTest {
     }
 
     @Test
+    @DisplayName("Проврека изменения возраста пользователя")
     void shouldSuccessUpdateUser() throws Exception {
         Integer id = userService.createUser("John", 30);
         userService.updateUserAge(id, 32);
@@ -54,6 +57,7 @@ class UserTest extends BaseTest {
     }
 
     @Test
+    @DisplayName("Проврека удаления пользователя")
     void shouldDeleteUser() throws Exception {
         Integer id = userService.createUser("John", 30);
         userService.deleteUser(id);
