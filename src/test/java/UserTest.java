@@ -5,8 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import org.junit.jupiter.api.*;;
+import org.junit.jupiter.api.*;
+import org.testcontainers.junit.jupiter.Testcontainers;;
 
+@Testcontainers
 class UserTest extends BaseTest {
 
     @BeforeEach
